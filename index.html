@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+      #map {
+        height: 90%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <button id="go" style="font-size:200%;margin-top:10px;margin-left:20px;">Darts no tabi!!</button>
+
+    <span>minimum latitude</span><input type="text" name="latmin" value="35.631554"/>
+    <span>minimum longitude</span><input type="text" name="lngmin" value="139.651393"[/>
+    <span>maximum latitude</span><input type="text" name="latmax" value="139.651393" />
+    <span>maximum longitude</span><input type="text" name="lngmax" value="139.789410"/>
+
+    <script>
+
+var map;
+var markers = [];
+
+function initMap() {
+  var myLatLng = {lat: 35.4932328, lng: 139.6021584};
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: myLatLng
+  });
+
+  // var marker = new google.maps.Marker({
+  //   position: myLatLng,
+  //   map: map,
+  //   title: 'Hello World!'
+  // });
+
+};
+
+var setTarget = function(){
+  var latmin = 35.631554;
+  var latmax = 35.749740;
+  var lngmin = 139.651393;
+  var lngmax = 139.789410;
+  var lat = Math.random()*(latmax-latmin)+latmin;
+  var lng = Math.random()*(lngmax-lngmin)+lngmin;
+
+  var myLatLng2 = {lat: lat, lng: lng};
+
+  var marker = new google.maps.Marker({
+    position: myLatLng2,
+    map: map
+  });
+
+  var searchUrl = "https://www.google.co.jp/search?q=" + lat + "," +lng;
+
+  var contentString = '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h1 id="firstHeading" class="firstHeading">Welcome!!</h1>'+
+    '<div id="bodyContent">'+
+    '<a href="'+searchUrl+'">latitude:'+lat+',longitude:'+lng+'</a>'+
+    '</div>'+
+    '</div>';
+
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+
+  markers.push(marker);
+
+};
+
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+var button = document.getElementById("go");
+button.addEventListener("click",setTarget);
+    </script>
+    <script async defer
+                               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTudkPqCefkmDQcS18XkUcBAi9KoKo5RQ&signed_in=true&callback=initMap"></script>
+  </body>
+</html>
+
